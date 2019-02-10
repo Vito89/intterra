@@ -1,0 +1,38 @@
+apply plugin: 'application'
+apply plugin: 'java'
+apply plugin: 'checkstyle'
+
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // https://mvnrepository.com/artifact/junit/junit
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+
+    // https://mvnrepository.com/artifact/org.projectlombok/lombok
+    compile group: 'org.projectlombok', name: 'lombok', version: '1.18.4'
+
+    // https://mvnrepository.com/artifact/org.glassfish.jersey.media/jersey-media-json-jackson
+    compile group: 'org.glassfish.jersey.media', name: 'jersey-media-json-jackson', version: '2.25.1'
+}
+
+mainClassName = "ru.vito.desktop.app.Runner"
+
+run {
+    if ( project.hasProperty("appArgs") ) {
+        args(appArgs.split('\n'))
+    }
+}
+
+checkstyle {
+    toolVersion = "8.17"
+    configDir = file("$rootDir/checkstyle")
+}
