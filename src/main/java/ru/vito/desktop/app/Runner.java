@@ -12,6 +12,5 @@ public class Runner {
 
         final EmailToLoginMap defineUsers = new UserDefinitionServiceImpl().define(args);
         System.out.println(defineUsers.toString());
-
     }
 }

@@ -25,7 +25,7 @@ public class RunnerTest {
     }
 
     @Test
-    public void givenNotEmptyList_BadRequest_Fail() {
+    public void givenNotEmptyList_BadRequest_Ok() {
         // ARRANGE
         final String request =
                 "user1 -> xxx@ya.ru, foo@gmail.com, lol@mail.ru\n" +
