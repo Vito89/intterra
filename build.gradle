@@ -1,6 +1,9 @@
 apply plugin: 'application'
 apply plugin: 'java'
-//apply plugin: 'checkstyle'
+apply plugin: 'checkstyle'
+
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
 
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
@@ -25,12 +28,11 @@ mainClassName = "ru.vito.desktop.app.Runner"
 
 run {
     if ( project.hasProperty("appArgs") ) {
-//        args appArgs
         args(appArgs.split('\n'))
     }
 }
 
-//checkstyle {
-//    toolVersion = "8.17"
-//    configDir = file("$rootDir/checkstyle")
-//}
+checkstyle {
+    toolVersion = "8.17"
+    configDir = file("$rootDir/checkstyle")
+}

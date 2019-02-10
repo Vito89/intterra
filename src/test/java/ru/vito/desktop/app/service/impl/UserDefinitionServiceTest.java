@@ -2,14 +2,13 @@ package ru.vito.desktop.app.service.impl;
 
 import jersey.repackaged.com.google.common.collect.Sets;
 import org.junit.Test;
-import ru.vito.desktop.app.commons.BaseTest;
 import ru.vito.desktop.app.models.EmailToLoginMap;
 import ru.vito.desktop.app.service.UserDefinitionService;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-public class UserDefinitionServiceTest extends BaseTest {
+public class UserDefinitionServiceTest {
 
     private UserDefinitionService userDefinitionService = new UserDefinitionServiceImpl();
 

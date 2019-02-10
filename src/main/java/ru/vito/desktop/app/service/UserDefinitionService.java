@@ -6,6 +6,6 @@ import ru.vito.desktop.app.models.EmailToLoginMap;
 @Contract
 public interface UserDefinitionService {
 
-    EmailToLoginMap define (String[] args);
+    EmailToLoginMap define(String[] args);
 
 }

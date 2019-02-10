@@ -50,12 +50,9 @@ public class UserDefinitionServiceImpl implements UserDefinitionService {
         }
 
         final HashMap<String, String> emailToLoginMap = usersWithEmails.getEmailToLoginMap();
-        if (emailToLoginMap.containsValue(sourceLogin)) {
-            throw new RuntimeException("Error: User already exists.");
-        }
-
         final HashSet<String> parsedEmails = parseEmailList(emailsExpected);
         final String userToRecord = defineUser(emailToLoginMap, parsedEmails).orElse(sourceLogin);
+
         doPutNew(emailToLoginMap, userToRecord, parsedEmails);
     }
 

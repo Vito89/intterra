@@ -6,6 +6,8 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @Builder
@@ -21,8 +23,26 @@ public class EmailToLoginMap implements Serializable {
     @Override
     public String toString() {
 
-        return "EmailToLoginMap{" + // TODO
-                "emailToLoginMap=" + emailToLoginMap +
-                '}';
+        final HashMap<String, Set<String>> loginEmailsMap = new HashMap<>();
+        emailToLoginMap.forEach((email, login) -> {
+
+            final Set<String> emails = loginEmailsMap.containsKey(login)
+                    ? loginEmailsMap.get(login) : new HashSet<>();
+            emails.add(email);
+
+            loginEmailsMap.put(login, emails);
+        });
+
+
+        final StringBuilder builder = new StringBuilder();
+        loginEmailsMap.forEach((login, emails) ->
+                builder.append(login)
+                        .append(" -> ")
+                        .append(emails.toString()
+                                .replace("[", "")
+                                .replace("]", ""))
+                        .append("\n"));
+
+        return builder.toString();
     }
 }

@@ -5,18 +5,13 @@ import ru.vito.desktop.app.service.impl.UserDefinitionServiceImpl;
 
 public class Runner {
 
-	/*
-	 * @param args receiving from input string array
-	 */
-	public static void main(final String[] args) {
-
-        int i = 0; // TODO remove
-        for (String s : args) {
-            System.out.println(s.length());
-            System.out.println("i=" + i++ + ":= " + s);
-        }
+    /*
+     * @param args receiving from input string array
+     */
+    public static void main(final String[] args) {
 
         final EmailToLoginMap defineUsers = new UserDefinitionServiceImpl().define(args);
         System.out.println(defineUsers.toString());
-	}
+
+    }
 }

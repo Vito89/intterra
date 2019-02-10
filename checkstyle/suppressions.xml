@@ -5,27 +5,7 @@
     "https://checkstyle.org/dtds/suppressions_1_2.dtd">
 
 <suppressions>
-  <suppress checks=".*"
-            files="generated[\\/]"/>
+  <suppress checks=".*" files="generated[\\/]"/>
 
-  <suppress checks="OneTopLevelClass"
-            files="ru[\\/]tcsbank[\\/]sme[\\/]reporting[\\/]workflow[\\/]common[\\/]services[\\/]internal[\\/]ContainerRetrieverDispatcher.java"/>
-
-  <suppress checks="OneTopLevelClass"
-            files="ru[\\/]tcsbank[\\/]sme[\\/]reporting[\\/]workflow[\\/]common[\\/]services[\\/]internal[\\/]ContainerProcessorDispatcher.java"/>
-
-  <suppress checks="(VariableDeclarationUsageDistance|AbbreviationAsWordInName)"
-            files=".*[\\/]src[\\/](test|testIntExt)[\\/]"/>
-
-  <suppress checks="LineLength"
-            files="ru[\\/]tcsbank[\\/]sme[\\/]reporting[\\/]test[\\/]business[\\/]support[\\/]TestUtils.java"/>
-
-  <suppress checks="LineLength"
-            files="ru[\\/]tcsbank[\\/]sme[\\/]reporting[\\/]workflow[\\/]incoming[\\/]demand[\\/]services[\\/]internal[\\/]DemandResponseIzOndocnpnoMarshallerSpec.java"/>
-
-  <suppress checks="LineLength"
-            files="ru[\\/]tcsbank[\\/]sme[\\/]reporting[\\/]workflow[\\/]incoming[\\/]demand[\\/]services[\\/]internal[\\/]DemandResponseIzOninfsoobMarshallerSpec.java"/>
-
-  <suppress checks="LineLength"
-            files="ru[\\/]tcsbank[\\/]sme[\\/]reporting[\\/]test[\\/]business[\\/]services[\\/]helpers[\\/]AstralSetupHelper.java"/>
+  <suppress checks="LineLength" files="Utils.java"/>
 </suppressions>
