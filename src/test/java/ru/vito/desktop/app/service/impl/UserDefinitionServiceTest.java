@@ -1,8 +1,9 @@
 package ru.vito.desktop.app.service.impl;
 
+import jersey.repackaged.com.google.common.collect.Sets;
 import org.junit.Test;
 import ru.vito.desktop.app.commons.BaseTest;
-import ru.vito.desktop.app.models.UsersWithEmails;
+import ru.vito.desktop.app.models.EmailToLoginMap;
 import ru.vito.desktop.app.service.UserDefinitionService;
 
 import static org.junit.Assert.assertEquals;
@@ -15,21 +16,21 @@ public class UserDefinitionServiceTest extends BaseTest {
     @Test
     public void givenNull_Ok() {
         // ACT
-        final UsersWithEmails response = userDefinitionService.define(null);
+        final EmailToLoginMap response = userDefinitionService.define(null);
 
         // ASSERT
         assertNotNull(response);
-        assertEquals(new UsersWithEmails(), response);
+        assertEquals(new EmailToLoginMap(), response);
     }
 
     @Test
     public void givenEmptyArray_Ok() {
         // ACT
-        final UsersWithEmails response = userDefinitionService.define(new String[0]);
+        final EmailToLoginMap response = userDefinitionService.define(new String[0]);
 
         // ASSERT
         assertNotNull(response);
-        assertEquals(new UsersWithEmails(), response);
+        assertEquals(new EmailToLoginMap(), response);
     }
 
     @Test
@@ -42,15 +43,17 @@ public class UserDefinitionServiceTest extends BaseTest {
                 "user5 -> xyz@pisem.net\n").split("\\n");
 
         // ACT
-        final UsersWithEmails response = userDefinitionService.define(request);
+        final EmailToLoginMap response = userDefinitionService.define(request);
 
         // ASSERT
         assertNotNull(response);
-        assertEquals(new UsersWithEmails(), response);
+        assertNotNull(response.getEmailToLoginMap());
+        assertEquals(2, Sets.newCopyOnWriteArraySet(response.getEmailToLoginMap().values()).size());
     }
 
     @Test
-    public void givenNotEmptyList_BadInput_Ok() {
+    public void givenNotEmptyList_BadRequest_Ok() {
+        // ARRANGE
         final String[] request = ("xxx@ya.ru, foo@gmail.com, lol@mail.ru\n" +
                 "user2 - foo@gmail.com, ups@pisem.net\n" +
                 "user3 -> xyz@pisem.net, vasya@pupkin.com\n" +
@@ -58,10 +61,11 @@ public class UserDefinitionServiceTest extends BaseTest {
                 "user5 -> \n").split("\\n");
 
         // ACT
-        final UsersWithEmails response = userDefinitionService.define(request);
+        final EmailToLoginMap response = userDefinitionService.define(request);
 
         // ASSERT
         assertNotNull(response);
-        assertEquals(new UsersWithEmails(), response);
+        assertNotNull(response.getEmailToLoginMap());
+        assertEquals(2, response.getEmailToLoginMap().size());
     }
 }

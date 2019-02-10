@@ -1,20 +1,21 @@
 package ru.vito.desktop.app.service.impl;
 
 import lombok.NonNull;
-import ru.vito.desktop.app.models.Emails;
-import ru.vito.desktop.app.models.UsersWithEmails;
+import ru.vito.desktop.app.common.Utils;
+import ru.vito.desktop.app.models.EmailToLoginMap;
 import ru.vito.desktop.app.service.UserDefinitionService;
 
 import javax.inject.Singleton;
-import java.util.HashMap;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Singleton
 public class UserDefinitionServiceImpl implements UserDefinitionService {
 
     @Override
-    public UsersWithEmails define(final String[] args) {
+    public EmailToLoginMap define(final String[] args) {
         if (args == null) {
-            return new UsersWithEmails();
+            return new EmailToLoginMap();
         }
 
         try {
@@ -24,44 +25,73 @@ public class UserDefinitionServiceImpl implements UserDefinitionService {
         }
     }
 
-    private UsersWithEmails doDefine(final @NonNull String[] args) {
-        final UsersWithEmails usersWithEmails = new UsersWithEmails(new HashMap<>());
+    private EmailToLoginMap doDefine(final @NonNull String[] args) {
+        final EmailToLoginMap emailToLoginMap = new EmailToLoginMap();
 
         for (final String arg : args) {
-            putNew(usersWithEmails, arg.split("->"));
+            putNew(emailToLoginMap, arg.split("->"));
         }
 
-        return compact(usersWithEmails);
+        return emailToLoginMap;
     }
 
-    private void putNew(final UsersWithEmails usersWithEmails, final String[] wordsInRow) {
-        if (wordsInRow.length != 2) {
+    private void putNew(final EmailToLoginMap usersWithEmails,
+                        final String[] wordsSplitArrow) {
+        if (wordsSplitArrow.length != 2) {
             System.out.println("Warn: Element was missed!");
             return;
         }
 
-        final String userExpectedWord = wordsInRow[0];
-        final String emailExpectedWords = wordsInRow[1];
-        if (userExpectedWord.length() <= 0 || emailExpectedWords.length() <= 0) {
+        final String sourceLogin = wordsSplitArrow[0];
+        final String emailsExpected = wordsSplitArrow[1];
+        if (sourceLogin.length() <= 0 || emailsExpected.length() <= 0) {
             System.out.println("Warn: Element was missed!");
             return;
         }
 
-        final HashMap<String, Emails> usersEmails = usersWithEmails.getUsersWithEmails();
-        if (usersEmails.containsKey(userExpectedWord)) {
+        final HashMap<String, String> emailToLoginMap = usersWithEmails.getEmailToLoginMap();
+        if (emailToLoginMap.containsValue(sourceLogin)) {
             throw new RuntimeException("Error: User already exists.");
         }
 
-        usersEmails.put(userExpectedWord, parseEmailList(emailExpectedWords));
+        final HashSet<String> parsedEmails = parseEmailList(emailsExpected);
+        final String userToRecord = defineUser(emailToLoginMap, parsedEmails).orElse(sourceLogin);
+        doPutNew(emailToLoginMap, userToRecord, parsedEmails);
     }
 
-    private UsersWithEmails compact(final UsersWithEmails usersWithEmails) {
-        // TODO
-        return null;
+    private Optional<String> defineUser(final HashMap<String, String> emailToLoginMap,
+                                        final HashSet<String> parsedEmails) {
+        for (String email : parsedEmails) {
+            if (emailToLoginMap.containsKey(email)) {
+                return Optional.of(emailToLoginMap.get(email));
+            }
+        }
+
+        return Optional.empty();
     }
 
-    private Emails parseEmailList(final String emailExpectedWords) {
-        // TODO
-        return null;
+    private void doPutNew(final Map<String, String> emailToLoginMap,
+                          final String sourceLogin,
+                          final HashSet<String> parsedEmails) {
+
+        parsedEmails.forEach(sourceEmail -> {
+            if (!emailToLoginMap.containsKey(sourceEmail)) {
+                emailToLoginMap.put(sourceEmail, sourceLogin);
+            }
+        });
+    }
+
+    private HashSet<String> parseEmailList(final @NonNull String emailsExpected) {
+        final Set<String> emails = Arrays.stream(emailsExpected.split(","))
+                .map(String::trim)
+                .collect(Collectors.toSet());
+
+        emails.removeIf(this::isNotValid);
+
+        return new HashSet<>(emails);
+    }
+
+    private boolean isNotValid(final String email) {
+        return !Utils.emailValidatePattern().matcher(email).matches();
     }
 }
