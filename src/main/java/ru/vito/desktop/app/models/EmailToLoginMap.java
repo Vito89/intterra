@@ -1,23 +1,26 @@
 package ru.vito.desktop.app.models;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 @Data
 @Builder
-@AllArgsConstructor
 public class EmailToLoginMap implements Serializable {
 
-    private HashMap<String, String> emailToLoginMap;
+    private Map<String, String> emailToLoginMap;
 
     public EmailToLoginMap() {
         this.emailToLoginMap = new HashMap<>();
+    }
+
+    public EmailToLoginMap(final Map<String, String> emailToLoginMap) {
+        this.emailToLoginMap = emailToLoginMap;
     }
 
     @Override

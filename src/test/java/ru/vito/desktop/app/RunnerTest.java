@@ -11,7 +11,7 @@ public class RunnerTest {
     }
 
     @Test
-    public void givenNotEmptyList_Ok() {
+    public void givenNotEmptyList_easyKit_Ok() {
         // ARRANGE
         final String request =
                 "user1 -> xxx@ya.ru, foo@gmail.com, lol@mail.ru\n" +
@@ -19,6 +19,17 @@ public class RunnerTest {
                         "user3 -> xyz@pisem.net, vasya@pupkin.com\n" +
                         "user4 -> ups@pisem.net, aaa@bbb.ru\n" +
                         "user5 -> xyz@pisem.net\n";
+
+        // ACT
+        Runner.main(request.split("\n"));
+    }
+
+    @Test
+    public void givenNotEmptyList_hardKit_Ok() {
+        // ARRANGE
+        final String request = ("user1 -> e1@ya.ru, e2@ya.ru\n" +
+                "user2 -> e3@ya.ru, e4@ya.ru\n" +
+                "user3 -> e1@ya.ru, e3@ya.ru\n");
 
         // ACT
         Runner.main(request.split("\n"));
