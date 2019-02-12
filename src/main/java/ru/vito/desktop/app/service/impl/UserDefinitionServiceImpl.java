@@ -26,16 +26,16 @@ public class UserDefinitionServiceImpl implements UserDefinitionService {
     }
 
     private EmailToLoginMap doDefine(final @NonNull String[] args) {
-        final EmailToLoginMap emailToLoginMap = new EmailToLoginMap();
+        final Map<String, String> emailToSetOfLoginMap = new HashMap<>();
 
         for (final String arg : args) {
-            putNew(emailToLoginMap, arg.split("->"));
+            putNew(emailToSetOfLoginMap, arg.split("->"));
         }
 
-        return emailToLoginMap;
+        return new EmailToLoginMap(emailToSetOfLoginMap);
     }
 
-    private void putNew(final EmailToLoginMap usersWithEmails,
+    private void putNew(final Map<String, String> emailToSetOfLoginMap,
                         final String[] wordsSplitArrow) {
         if (wordsSplitArrow.length != 2) {
             System.out.println("Warn: Element was missed!");
@@ -49,33 +49,8 @@ public class UserDefinitionServiceImpl implements UserDefinitionService {
             return;
         }
 
-        final HashMap<String, String> emailToLoginMap = usersWithEmails.getEmailToLoginMap();
         final HashSet<String> parsedEmails = parseEmailList(emailsExpected);
-        final String userToRecord = defineUser(emailToLoginMap, parsedEmails).orElse(sourceLogin);
-
-        doPutNew(emailToLoginMap, userToRecord, parsedEmails);
-    }
-
-    private Optional<String> defineUser(final HashMap<String, String> emailToLoginMap,
-                                        final HashSet<String> parsedEmails) {
-        for (String email : parsedEmails) {
-            if (emailToLoginMap.containsKey(email)) {
-                return Optional.of(emailToLoginMap.get(email));
-            }
-        }
-
-        return Optional.empty();
-    }
-
-    private void doPutNew(final Map<String, String> emailToLoginMap,
-                          final String sourceLogin,
-                          final HashSet<String> parsedEmails) {
-
-        parsedEmails.forEach(sourceEmail -> {
-            if (!emailToLoginMap.containsKey(sourceEmail)) {
-                emailToLoginMap.put(sourceEmail, sourceLogin);
-            }
-        });
+        doPutNew(emailToSetOfLoginMap, sourceLogin, parsedEmails);
     }
 
     private HashSet<String> parseEmailList(final @NonNull String emailsExpected) {
@@ -86,6 +61,52 @@ public class UserDefinitionServiceImpl implements UserDefinitionService {
         emails.removeIf(this::isNotValid);
 
         return new HashSet<>(emails);
+    }
+
+    private void doPutNew(final Map<String, String> emailToSetOfLoginMap,
+                          final String sourceLogin,
+                          final HashSet<String> parsedEmails) {
+        if (emailToSetOfLoginMap.isEmpty()) {
+            putAllEmails(emailToSetOfLoginMap, sourceLogin, parsedEmails);
+            return;
+        }
+
+        final Set<String> usersInParsedEmails = new HashSet<>();
+        for (String email : parsedEmails) {
+            if (emailToSetOfLoginMap.containsKey(email)) {
+                usersInParsedEmails.add(emailToSetOfLoginMap.get(email));
+            }
+        }
+
+        if (usersInParsedEmails.size() != 0) {
+            usersInParsedEmails.add(sourceLogin);
+            mergeMapAndPutNewEmails(usersInParsedEmails, parsedEmails, emailToSetOfLoginMap);
+        } else {
+            putAllEmails(emailToSetOfLoginMap, sourceLogin, parsedEmails);
+        }
+    }
+
+    private void mergeMapAndPutNewEmails(final Set<String> usersInParsedEmails,
+                                         final HashSet<String> parsedEmails,
+                                         final Map<String, String> emailToSetOfLoginMap) {
+        if (usersInParsedEmails.size() < 2) {
+            throw new RuntimeException("Non conditional state.");
+        }
+
+        final String mainUser = usersInParsedEmails.iterator().next();
+        emailToSetOfLoginMap.forEach((email, user) -> {
+            if (usersInParsedEmails.contains(user) && !mainUser.equals(user)) {
+                emailToSetOfLoginMap.put(email, mainUser);
+            }
+        });
+
+        putAllEmails(emailToSetOfLoginMap, mainUser, parsedEmails);
+    }
+
+    private void putAllEmails(final Map<String, String> map, final String login, final HashSet<String> emails) {
+        for (String email : emails) {
+            map.put(email, login);
+        }
     }
 
     private boolean isNotValid(final String email) {
