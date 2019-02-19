@@ -1,16 +1,34 @@
 package ru.vito.desktop.app;
 
-import ru.vito.desktop.app.models.EmailToLoginMap;
-import ru.vito.desktop.app.service.impl.UserDefinitionServiceImpl;
+import ru.vito.desktop.app.models.DefinedUsers;
+import ru.vito.desktop.app.service.impl.Definer;
+import ru.vito.desktop.app.service.impl.Parser;
+import ru.vito.desktop.app.service.impl.Reader;
+
+import java.util.HashSet;
+import java.util.Map;
 
 public class Runner {
 
-    /*
-     * @param args receiving from input string array
+    /**
+     * @param strings receiving from input string array
      */
-    public static void main(final String[] args) {
+    public static void main(final String[] strings) {
 
-        final EmailToLoginMap defineUsers = new UserDefinitionServiceImpl().define(args);
-        System.out.println(defineUsers.toString());
+        System.out.println(run(strings));
+    }
+
+    private static String run(final String[] strings) {
+
+        final Map<String, HashSet<String>> userToEmailsMap =
+            new Parser().parse(
+                new Reader().read(strings)
+            );
+
+        final DefinedUsers definedUsers =
+            new Definer()
+                .define(userToEmailsMap);
+
+        return definedUsers.toString();
     }
 }

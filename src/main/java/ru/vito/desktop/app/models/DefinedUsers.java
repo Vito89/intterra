@@ -11,15 +11,15 @@ import java.util.Set;
 
 @Data
 @Builder
-public class EmailToLoginMap implements Serializable {
+public class DefinedUsers implements Serializable {
 
     private Map<String, String> emailToLoginMap;
 
-    public EmailToLoginMap() {
+    public DefinedUsers() {
         this.emailToLoginMap = new HashMap<>();
     }
 
-    public EmailToLoginMap(final Map<String, String> emailToLoginMap) {
+    public DefinedUsers(final Map<String, String> emailToLoginMap) {
         this.emailToLoginMap = emailToLoginMap;
     }
 
