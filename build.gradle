@@ -32,6 +32,13 @@ run {
     }
 }
 
+test {
+    useJUnitPlatform()
+    testLogging {
+        exceptionFormat = 'full'
+    }
+}
+
 checkstyle {
     toolVersion = "8.17"
     configDir = file("$rootDir/checkstyle")

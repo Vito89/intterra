@@ -5,13 +5,13 @@ import org.junit.jupiter.api.Test;
 class RunnerTest {
 
     @Test
-    public void givenEmptyList_Ok() {
+    void givenEmptyList_Ok() {
         // ACT
         Runner.main(new String[0]);
     }
 
     @Test
-    public void givenNotEmptyList_easyKit_Ok() {
+    void givenNotEmptyList_easyKit_Ok() {
         // ARRANGE
         final String request =
                 "user1 -> xxx@ya.ru, foo@gmail.com, lol@mail.ru\n" +
