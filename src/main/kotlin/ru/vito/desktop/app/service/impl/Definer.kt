@@ -3,25 +3,19 @@ package ru.vito.desktop.app.service.impl
 import ru.vito.desktop.app.models.DefinedUsers
 import ru.vito.desktop.app.service.Define
 
-import javax.inject.Singleton
 import java.util.HashMap
 import java.util.HashSet
 
-@Singleton
 class Definer : Define {
 
-    override fun define(userToEmailsMap: Map<String, HashSet<String>>?): DefinedUsers? {
-        if (userToEmailsMap == null) {
-            return null
-        }
-
+    override fun define(userToEmailsMap: Map<String, HashSet<String>>): DefinedUsers {
         val emailToLoginsMap = HashMap<String, String>()
         userToEmailsMap.forEach { user, emails -> doPutNew(emailToLoginsMap, user, emails) }
 
         return DefinedUsers(emailToLoginsMap)
     }
 
-    private fun doPutNew(emailToSetOfLoginMap: MutableMap<String, String>,
+    private fun doPutNew(emailToSetOfLoginMap: Map<String, HashSet<String>>,
                          sourceLogin: String,
                          parsedEmails: HashSet<String>) {
         if (emailToSetOfLoginMap.isEmpty()) {

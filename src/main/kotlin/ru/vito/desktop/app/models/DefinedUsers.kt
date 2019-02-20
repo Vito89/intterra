@@ -1,15 +1,9 @@
 package ru.vito.desktop.app.models
 
-import lombok.Builder
-import lombok.Data
-
 import java.io.Serializable
-import java.util.HashMap
-import java.util.HashSet
+import java.util.*
 
-@Data
-@Builder
-class DefinedUsers : Serializable {
+data class DefinedUsers : Serializable {
 
     private var emailToLoginMap: Map<String, String>? = null
 

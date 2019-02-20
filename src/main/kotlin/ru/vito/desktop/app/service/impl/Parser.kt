@@ -7,14 +7,11 @@ import java.util.*
 import java.util.stream.Collectors
 
 import ru.vito.desktop.app.common.Utils.EMAIL_PATTERN
+import java.util.function.Predicate
 
 class Parser : Parse {
 
-    override fun parse(userToEmailsMap: Map<String, String>?): Map<String, HashSet<String>>? {
-        if (userToEmailsMap == null) {
-            return null
-        }
-
+    override fun parse(userToEmailsMap: Map<String, String>): Map<String, HashSet<String>> {
         val userToParsedEmailsMap = HashMap<String, HashSet<String>>()
         userToEmailsMap.forEach { user, emails ->
             val parsedEmails = parseEmails(emails)
