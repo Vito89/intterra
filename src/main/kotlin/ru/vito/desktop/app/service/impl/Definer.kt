@@ -2,20 +2,18 @@ package ru.vito.desktop.app.service.impl
 
 import ru.vito.desktop.app.models.DefinedUsers
 import ru.vito.desktop.app.service.Define
-
-import java.util.HashMap
-import java.util.HashSet
+import java.util.*
 
 class Definer : Define {
 
     override fun define(userToEmailsMap: Map<String, HashSet<String>>): DefinedUsers {
-        val emailToLoginsMap = HashMap<String, String>()
+        val emailToLoginsMap: HashMap<String, String> = HashMap()
         userToEmailsMap.forEach { user, emails -> doPutNew(emailToLoginsMap, user, emails) }
 
         return DefinedUsers(emailToLoginsMap)
     }
 
-    private fun doPutNew(emailToSetOfLoginMap: Map<String, HashSet<String>>,
+    private fun doPutNew(emailToSetOfLoginMap: HashMap<String, String>,
                          sourceLogin: String,
                          parsedEmails: HashSet<String>) {
         if (emailToSetOfLoginMap.isEmpty()) {
@@ -25,10 +23,10 @@ class Definer : Define {
             return
         }
 
-        val usersInParsedEmails = HashSet<String>()
+        val usersInParsedEmails: HashSet<String> = HashSet()
         for (email in parsedEmails) {
             if (emailToSetOfLoginMap.containsKey(email)) {
-                usersInParsedEmails.add(emailToSetOfLoginMap[email])
+                usersInParsedEmails.add(emailToSetOfLoginMap[email]!!)
             }
         }
 

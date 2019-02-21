@@ -1,11 +1,10 @@
 package ru.vito.desktop.app.service.impl
 
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
-import java.util.HashMap
-import java.util.HashSet
+import java.util.*
 import java.util.stream.Collectors
-
-import org.junit.jupiter.api.Assertions.*
 
 internal class ParserTest {
 
@@ -14,10 +13,11 @@ internal class ParserTest {
     @Test
     fun givenNullRequest_Ok() {
         // ACT
-        val response = parser.parse(null)
+        val response = parser.parse(Collections.emptyMap())
 
         // ASSERT
-        assertNull(response)
+        assertNotNull(response) // TODO to valid test
+        assertEquals(0, response.size)
     }
 
     @Test
@@ -27,7 +27,7 @@ internal class ParserTest {
 
         // ASSERT
         assertNotNull(response)
-        assertEquals(0, response!!.size)
+        assertEquals(0, response.size)
     }
 
     @Test
@@ -41,7 +41,7 @@ internal class ParserTest {
 
         // ASSERT
         assertNotNull(response)
-        assertEquals(1, response!!.size)
+        assertEquals(1, response.size)
         assertEquals(1, response.keys.size)
         assertEquals(1, response.values.size)
         assertEquals(3, response.values.iterator().next().size)
@@ -62,12 +62,12 @@ internal class ParserTest {
 
         // ASSERT
         assertNotNull(response)
-        assertEquals(5, response!!.size)
+        assertEquals(5, response.size)
         assertEquals(5, response.keys.size)
         assertEquals(5, response.values.size)
         assertEquals(7, response.values.stream()
-                .flatMap<String>(Function<HashSet<String>, Stream<out String>> { it.stream() })
-                .collect<Set<String>, Any>(Collectors.toSet())
+                .flatMap { it.stream() }
+                .collect(Collectors.toSet())
                 .size)
     }
 
@@ -84,12 +84,12 @@ internal class ParserTest {
 
         // ASSERT
         assertNotNull(response)
-        assertEquals(3, response!!.size)
+        assertEquals(3, response.size)
         assertEquals(3, response.keys.size)
         assertEquals(3, response.values.size)
         assertEquals(4, response.values.stream()
-                .flatMap<String>(Function<HashSet<String>, Stream<out String>> { it.stream() })
-                .collect<Set<String>, Any>(Collectors.toSet())
+                .flatMap { it.stream() }
+                .collect(Collectors.toSet())
                 .size)
     }
 }

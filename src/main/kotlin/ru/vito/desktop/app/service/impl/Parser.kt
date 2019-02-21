@@ -1,13 +1,9 @@
 package ru.vito.desktop.app.service.impl
 
-import lombok.NonNull
+import ru.vito.desktop.app.common.Utils.EMAIL_PATTERN
 import ru.vito.desktop.app.service.Parse
-
 import java.util.*
 import java.util.stream.Collectors
-
-import ru.vito.desktop.app.common.Utils.EMAIL_PATTERN
-import java.util.function.Predicate
 
 class Parser : Parse {
 
@@ -23,12 +19,13 @@ class Parser : Parse {
         return userToParsedEmailsMap
     }
 
-    private fun parseEmails(@NonNull emails: String): HashSet<String> {
-        val emailsSet = Arrays.stream<String>(emails.split(",".toRegex()).dropLastWhile({ it.isEmpty() }).toTypedArray())
-                .map<String>(Function<String, String> { it.trim({ it <= ' ' }) })
-                .collect<Set<String>, Any>(Collectors.toSet())
+    private fun parseEmails(emails: String): HashSet<String> {
+        val emailsSet = Arrays.stream(
+                emails.split(",".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+        ).map<String> { it.trim { it <= ' ' } }
+                .collect(Collectors.toSet())
 
-        emailsSet.removeIf(Predicate<String> { this.emailIsNotValid(it) })
+        emailsSet.forEach { this.emailIsNotValid(it) }
 
         return HashSet(emailsSet)
     }

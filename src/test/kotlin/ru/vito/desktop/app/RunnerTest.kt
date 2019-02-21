@@ -7,7 +7,8 @@ internal class RunnerTest {
     @Test
     fun givenEmptyList_Ok() {
         // ACT
-        Runner.run()
+        val strings: Array<String> = arrayOf("")
+        Runner.run(strings)
     }
 
     @Test
@@ -20,7 +21,7 @@ internal class RunnerTest {
                 "user5 -> xyz@pisem.net\n"
 
         // ACT
-        Runner.run(request.split("\n".toRegex()).dropLastWhile({ it.isEmpty() }).toTypedArray())
+        Runner.run(request.split("\n".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray())
     }
 
     @Test
@@ -31,7 +32,7 @@ internal class RunnerTest {
                 "user3 -> e1@ya.ru, e3@ya.ru\n"
 
         // ACT
-        Runner.run(request.split("\n".toRegex()).dropLastWhile({ it.isEmpty() }).toTypedArray())
+        Runner.run(request.split("\n".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray())
     }
 
     @Test
@@ -44,6 +45,6 @@ internal class RunnerTest {
                 "user5 -> xyz@pisem.net\n"
 
         // ACT
-        Runner.run(request.split("\n".toRegex()).dropLastWhile({ it.isEmpty() }).toTypedArray())
+        Runner.run(request.split("\n".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray())
     }
 }
